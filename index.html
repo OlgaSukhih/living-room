@@ -106,32 +106,46 @@
 
   <div id="tooltip" class="tooltip"></div>
 
-  <script>
-    function showWord(word) {
-      const overlay = document.createElement('div');
-      overlay.className = 'overlay';
-      const popup = document.createElement('div');
-      popup.className = 'popup';
-      popup.innerText = "This is " + word + ".";
-      overlay.onclick = () => document.body.removeChild(overlay);
-      overlay.appendChild(popup);
-      document.body.appendChild(overlay);
+<script>
+  function showWord(word) {
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    const popup = document.createElement('div');
+    popup.className = 'popup';
+    
+    // определим множественное или единственное число
+    const pluralWords = ['curtains', 'cushions'];
+    const articleNeeded = ['a', 'an'];
+
+    let sentence = '';
+    if (pluralWords.includes(word)) {
+      sentence = `There are ${word}.`;
+    } else {
+      const article = articleNeeded.includes(word.split(' ')[0]) ? '' : 'a ';
+      sentence = `There is ${word}.`;
     }
 
-    const tooltip = document.getElementById('tooltip');
-    document.querySelectorAll('.hotspot').forEach(hotspot => {
-      hotspot.addEventListener('mouseenter', (e) => {
-        const word = e.target.getAttribute('data-word');
-        tooltip.innerText = word;
-        const rect = e.target.getBoundingClientRect();
-        tooltip.style.left = `${rect.left + rect.width / 2}px`;
-        tooltip.style.top = `${rect.top - 10}px`;
-        tooltip.classList.add('show');
-      });
-      hotspot.addEventListener('mouseleave', () => {
-        tooltip.classList.remove('show');
-      });
+    popup.innerText = sentence;
+    overlay.onclick = () => document.body.removeChild(overlay);
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+  }
+
+  const tooltip = document.getElementById('tooltip');
+  document.querySelectorAll('.hotspot').forEach(hotspot => {
+    hotspot.addEventListener('mouseenter', (e) => {
+      const word = e.target.getAttribute('data-word');
+      tooltip.innerText = word;
+      const rect = e.target.getBoundingClientRect();
+      tooltip.style.left = `${rect.left + rect.width / 2}px`;
+      tooltip.style.top = `${rect.top - 10}px`;
+      tooltip.classList.add('show');
     });
-  </script>
+    hotspot.addEventListener('mouseleave', () => {
+      tooltip.classList.remove('show');
+    });
+  });
+</script>
+
 </body>
 </html>
